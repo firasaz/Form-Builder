@@ -11,8 +11,8 @@ This is a custom form builder for React JS projects that allows you to provide t
   cd form-builder
  ```  
 3. Run npm i then npm run dev.
-   ```
+  ```
    npm i
    npm run dev
-   ```
+  ```
 4.  You're done! Open your browser and check the form and style it however you like.
