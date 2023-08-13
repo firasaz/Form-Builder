@@ -2,7 +2,7 @@ import React from 'react'
 
 function FormBuilder({form}) {
   return (
-    <div id='customForm'>
+    <>
       {form.components.map((component, index) => (
           <div key={index} className={`${form.class}`}>
             <label htmlFor={component.id} className={component.labelClass}>{component.label}</label>
@@ -19,7 +19,7 @@ function FormBuilder({form}) {
             }
           </div>
       ))}
-    </div>
+    </>
   )
 }
 
