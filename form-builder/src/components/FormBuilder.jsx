@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 function FormBuilder({form, handleChange, handleSubmit}) {
   const [errors, setErrors] = useState({})
@@ -7,45 +7,74 @@ function FormBuilder({form, handleChange, handleSubmit}) {
     let formIsValid = true;
     const userInput = e.target.value
 
-    if (required && !e.target.value) {
+    if (required && !userInput) {
+      console.log('field empty')
       formIsValid = false;
-      setErrors({[id]: "Cannot be empty"});
-    }
-
-    // Name
-    if (type === "name") {
+      setErrors({
+        ...errors,
+        [id]: "Cannot be empty"
+      })
+    } else {
       if (userInput.match(regex)) {
-        formIsValid = true;
-        setErrors({[id]: null});
-        console.log('valid')
+        setErrors({
+          ...errors,
+          [id]: null
+        })
       } else {
-        formIsValid = false;
-        setErrors({[id]: "Only letters"});
-        console.log('invalid')
+        setErrors({
+          ...errors,
+          [id]: 'Invalid input'
+        })
       }
     }
 
-    // Email
-    if (type === "email") {
-      let lastAtPos = userInput.lastIndexOf("@");
-      let lastDotPos = userInput.lastIndexOf(".");
+    // // Name
+    // if (type === "name" && userInput) {
+    //   if (userInput.match(regex)) {
+    //     formIsValid = true;
+    //     setErrors({
+    //       ...errors,
+    //       [id]: null
+    //     })
+    //     console.log('valid')
+    //   } else {
+    //     formIsValid = false;
+    //     setErrors({
+    //       ...errors,
+    //       [id]: `Only letters`
+    //     })
+    //     console.log('invalid')
+    //   }
+    // }
+    // // Email
+    // if (type === "email" && userInput) {
+    //   let lastAtPos = userInput.lastIndexOf("@");
+    //   let lastDotPos = userInput.lastIndexOf(".");
 
-      if (
-        !(
-          lastAtPos < lastDotPos &&
-          lastAtPos > 0 &&
-          userInput.indexOf("@@") == -1 &&
-          lastDotPos > 2 &&
-          userInput.length - lastDotPos > 2
-        )
-      ) {
-        formIsValid = false;
-        setErrors({[id]: "Email is not valid"});
-      } else {
-        formIsValid = true
-        setErrors({[id]: null})
-      }
-    }
+    //   if (
+    //     !(
+    //       lastAtPos < lastDotPos &&
+    //       lastAtPos > 0 &&
+    //       userInput.indexOf("@@") == -1 &&
+    //       lastDotPos > 2 &&
+    //       userInput.length - lastDotPos > 2
+    //     )
+    //   ) {
+    //     formIsValid = false;
+    //     console.log('invalid')
+    //     setErrors({
+    //       ...errors,
+    //       [id]: `${id} is not valid`
+    //     })
+    //   } else {
+    //     formIsValid = true
+    //     console.log('valid')
+    //     setErrors({
+    //       ...errors,
+    //       [id]: null
+    //     })
+    //   }
+    // }
 
     return formIsValid;
   }
@@ -70,7 +99,7 @@ function FormBuilder({form, handleChange, handleSubmit}) {
                       className={component.class} 
                       onClick={(e) => {
                         handleChange(e); 
-                        handleValidation(component.required) 
+                        handleValidation(e, component) 
                       }}
                     >
                       {
@@ -96,11 +125,12 @@ function FormBuilder({form, handleChange, handleSubmit}) {
                         handleChange(e); 
                         handleValidation(e, component) 
                       }} 
+                      // style={{outline-color: 'red'}}
                     />
-                    {component.id === 'name1' ? 
-                      <span style={{ color: "red" }}>{errors["name"]}</span> : 
-                      <span style={{ color: "red" }}>{errors["email"]}</span>
-                    }
+                    <div>
+                      <span style={{ color: "red" }}>{errors[component.id]}</span>
+                    </div>
+                    { console.log(errors) }
                   </>
                 )
               )

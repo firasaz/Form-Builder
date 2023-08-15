@@ -21,7 +21,7 @@ function TestForm() {
             'class': 'customForm',
             'label': 'name',
             'labelClass': 'label',
-            'type': 'name',
+            'type': 'text',
             'required': true,
             'value': '',
             'regex': '^[a-zA-Z]+$'
@@ -40,9 +40,10 @@ function TestForm() {
             'class': 'customForm',
             'label': 'email',
             'labelClass': 'label',
-            'type': 'email',
-            'required': false,
-            'value': ''
+            'type': 'text',
+            'required': true,
+            'value': '',
+            'regex': '^[a-zA-Z]+$'
         },
         {
             'id': 'select',
