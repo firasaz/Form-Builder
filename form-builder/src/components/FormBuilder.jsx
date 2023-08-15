@@ -3,13 +3,11 @@ import React, { useState } from 'react'
 function FormBuilder({form, handleChange, handleSubmit}) {
   const [errors, setErrors] = useState({})
   
-  const handleValidation = (e, {id, required, type, regex}) => {
-    let formIsValid = true;
+  const handleValidation = (e, {id, required, regex, type}) => {
     const userInput = e.target.value
 
     if (required && !userInput) {
       console.log('field empty')
-      formIsValid = false;
       setErrors({
         ...errors,
         [id]: "Cannot be empty"
@@ -31,14 +29,12 @@ function FormBuilder({form, handleChange, handleSubmit}) {
     // // Name
     // if (type === "name" && userInput) {
     //   if (userInput.match(regex)) {
-    //     formIsValid = true;
     //     setErrors({
     //       ...errors,
     //       [id]: null
     //     })
     //     console.log('valid')
     //   } else {
-    //     formIsValid = false;
     //     setErrors({
     //       ...errors,
     //       [id]: `Only letters`
@@ -60,15 +56,12 @@ function FormBuilder({form, handleChange, handleSubmit}) {
     //       userInput.length - lastDotPos > 2
     //     )
     //   ) {
-    //     formIsValid = false;
     //     console.log('invalid')
     //     setErrors({
     //       ...errors,
     //       [id]: `${id} is not valid`
     //     })
     //   } else {
-    //     formIsValid = true
-    //     console.log('valid')
     //     setErrors({
     //       ...errors,
     //       [id]: null
@@ -81,30 +74,30 @@ function FormBuilder({form, handleChange, handleSubmit}) {
   return (
     <>
       {form.components.map((component, index) => (
-          <div key={index} className={`${form.class}`}>
+          <div key={index} className={`${form.class.stateDefault}`} style={{display: component?.display}}>
             {
-              component.type === 'submit' ? (
-                <button id={component.id} className={component.class} type={component.type} onClick={handleSubmit}>{component.text}</button>
+              component?.type === 'submit' ? (
+                <button id={component?.id} className={component?.class} type={component?.type} onClick={handleSubmit}>{component?.text}</button>
               ) : (
-                component.type === 'select' ? (
+                component?.type === 'select' ? (
                   <>
                     <label
-                      htmlFor={component.id} 
-                      className={component.labelClass}
+                      htmlFor={component?.id} 
+                      className={component?.labelClass}
                     >
-                      {component.label}
-                    </label>
+                      {component?.label}
+                    </label><br />
                     <select
-                      id={component.id} 
-                      className={component.class} 
+                      id={component?.id} 
+                      className={component?.class} 
                       onClick={(e) => {
                         handleChange(e); 
                         handleValidation(e, component) 
                       }}
                     >
                       {
-                        component.options.map((option, index) => (
-                          <option key={index} value={option.value}>{option.text}</option>
+                        component?.options.map((option, index) => (
+                          <option key={index} value={option?.value}>{option?.text}</option>
                         ))
                       }
                     </select>
@@ -112,25 +105,26 @@ function FormBuilder({form, handleChange, handleSubmit}) {
                 ) : (
                   <>
                     <label 
-                      htmlFor={component.id} 
-                      className={component.labelClass}
+                      htmlFor={component?.id} 
+                      className={component?.labelClass}
                     >
-                      {component.label}
-                    </label>
+                      {component?.label}
+                    </label><br />
                     <input 
-                      id={component.id} 
+                      id={component?.id} 
                       className={component.class} 
                       type={component.type} 
                       onChange={(e) => { 
                         handleChange(e); 
                         handleValidation(e, component) 
                       }} 
+                      placeholder = {component?.placeholder}
                       // style={{outline-color: 'red'}}
                     />
                     <div>
-                      <span style={{ color: "red" }}>{errors[component.id]}</span>
+                      <span style={{ color: "red" }}>{errors[component?.id]}</span>
                     </div>
-                    { console.log(errors) }
+                    {/* { console.log(errors) } */}
                   </>
                 )
               )

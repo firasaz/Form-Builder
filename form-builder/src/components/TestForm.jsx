@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import FormBuilder from './FormBuilder'
+import { useTranslation } from 'react-i18next'
+import { changeLanguage } from 'i18next'
+
 function TestForm() {
-    const [formData, setFormData] = useState({})
+  const { t, i18n } = useTranslation()
+  const [formData, setFormData] = useState({})
 
     const handleChange = (e) => {
         setFormData({
@@ -14,17 +18,25 @@ function TestForm() {
         e.preventDefault()
         console.log(formData)
     }
+
+    const handleLanguage = lng => {
+        i18n.changeLanguage(lng)
+    }
     
     const customForm = [
         {
             'id': 'name1',
-            'class': 'customForm',
-            'label': 'name',
+            'class': {
+                'stateDefault': 'defaultClass',
+                'stateError': '',
+                'stateInactive': ''
+            },
+            'label': t('name'),
             'labelClass': 'label',
             'type': 'text',
             'required': true,
-            'value': '',
-            'regex': '^[a-zA-Z]+$'
+            // 'regex': '^[a-zA-Z]+$',
+            'placeholder': 'full name'
         },
         {
             'id': 'input1',
@@ -33,17 +45,17 @@ function TestForm() {
             'labelClass': 'label',
             'type': 'text',
             'required': false,
-            'value': ''
+            'display': 'block'
         },
         {
             'id': 'email',
             'class': 'customForm',
-            'label': 'email',
+            'label': t('email'),
             'labelClass': 'label',
             'type': 'text',
             'required': true,
-            'value': '',
-            'regex': '^[a-zA-Z]+$'
+            'regex': '^[A-Za-z0-9](([a-zA-Z0-9,=\.!\-#|\$%\^&\*\+/\?_`\{\}~]+)*)@(?:[0-9a-zA-Z-]+\.)+[a-zA-Z]{2,9}$',
+            'placeholder': 'email'
         },
         {
             'id': 'select',
@@ -56,7 +68,6 @@ function TestForm() {
                 'text': 'select element'
             }],
             'required': false,
-            'value': ''
         },
         {
             'id': 'submit',
@@ -64,7 +75,6 @@ function TestForm() {
             'type': 'submit',
             'text': 'Submit',
             'required': false,
-            'value': '',
             'visible': true,
 
         }
@@ -81,6 +91,10 @@ function TestForm() {
     // }, [])
   return (
     <div>
+        <div style={{margin: '5px'}}>
+            <button onClick={() => changeLanguage('en')}>en</button>
+            <button onClick={() => changeLanguage('ar')}>ar</button>
+        </div>
         <FormBuilder 
             form={{
                 class: 'form',
