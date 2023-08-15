@@ -75,7 +75,7 @@ function TestForm() {
             'type': 'submit',
             'text': 'Submit',
             'required': false,
-            'visible': true,
+            'display': 'block',
 
         }
     ]
