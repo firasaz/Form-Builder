@@ -190,7 +190,6 @@ function TestForm() {
             'text': 'Submit3',
             'required': false,
             'display': 'block',
-
         }
     ]
 

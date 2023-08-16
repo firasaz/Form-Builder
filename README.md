@@ -8,6 +8,10 @@ The component expects a list of objects where each element object is a pair of l
 - label: the text value of the label.
 - labelClass: the class label to give a one class for all the labels in the form. Could be used to add styling to your label with a CSS framework such as bootstrap or tailwindCSS.
 - type: this determines whether we add a "input" element or a "select" element under our label
+- required: to ensure that a certain field is not left empty by the user.
+- regex: custom validation by regex the user can optionally supply to be used in validation. *<ins>Note</ins>: validation is only done for required fields*
+- placeholder: specify your placeholder for the input fields.
+- display: specify whether a field is hidden or displayed. expects any valid 'display' attribute values.
 - options: a list of objects where each object is attributes of each option in our select attribute. Each object takes two values:
   - value: the value of the option.
   - text: the text of the option that the user sees.
