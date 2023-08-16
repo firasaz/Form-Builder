@@ -1,4 +1,4 @@
-# Form-Builder
+# Form Builder
 This is a custom form builder for React JS projects that allows you to provide the "FormBuilder" component with an array of your components and the component will render your form.
 
 ## Description
@@ -6,7 +6,7 @@ The component expects a list of objects where each element object is a pair of l
 - class: the class that wraps each label/input (or select) elements.
 - id: the id attribute that the label will reference its relevant input element with.
 - label: the text value of the label.
-- labelClass: the class label to add styling to your label with bootstrap or tailwindCSS.
+- labelClass: the class label to give a one class for all the labels in the form. Could be used to add styling to your label with a CSS framework such as bootstrap or tailwindCSS.
 - type: this determines whether we add a "input" element or a "select" element under our label
 - options: a list of objects where each object is attributes of each option in our select attribute. Each object takes two values:
   - value: the value of the option.
