@@ -1,41 +1,13 @@
-import React, { useState } from 'react'
+import React from 'react'
 import FormBuilder from './FormBuilder'
 import { useTranslation } from 'react-i18next'
 import { changeLanguage } from 'i18next'
 
 function TestForm() {
   const { t } = useTranslation()
-  const [formData1, setFormData1] = useState({})
-  const [formData2, setFormData2] = useState({})
-  const [formData3, setFormData3] = useState({})
-
-    const handleChange = (e) => {
-        if(e.target.className.includes('form1')) {
-            setFormData1({
-                ...formData1,
-                [e.target.id]: e.target.value
-            })
-        }
-        if(e.target.className.includes('form2')) {
-            setFormData2({
-                ...formData2,
-                [e.target.id]: e.target.value
-            })
-        }
-        if(e.target.className.includes('form3')) {
-            setFormData3({
-                ...formData3,
-                [e.target.id]: e.target.value
-            })
-        }
-    }
-    
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        // log (submit the form later) the form of the relevant button not all the forms
-        e.target.className.includes('form1') && console.log(formData1)
-        e.target.className.includes('form2') && console.log(formData2)
-        e.target.className.includes('form3') && console.log(formData3)
+  
+    const handleTranslation = (lng) => {
+        changeLanguage(lng)
     }
     
     const customForm1 = [
@@ -71,6 +43,7 @@ function TestForm() {
         {
             'id': 'select',
             'class': 'customForm form1',
+            "path": "contact.name",
             'label': 'select',
             'labelClass': 'label',
             'type': 'select',
@@ -141,73 +114,66 @@ function TestForm() {
 
         }
     ]
-    const customForm3 = [
-        {
-            'id': 'name3',
-            'class': 'customForm form3',
-            'label': t('name'),
-            'labelClass': 'label',
-            'type': 'text',
-            'required': true,
-            // 'regex': '^[a-zA-Z]+$',
-            'placeholder': 'full name'
-        },
-        {
-            'id': 'input3',
-            'class': 'customForm form3',
-            'label': 'input3',
-            'labelClass': 'label',
-            'type': 'text',
-            'required': false,
-            'display': 'none'
-        },
-        {
-            'id': 'email3',
-            'class': 'customForm form3',
-            'label': t('email'),
-            'labelClass': 'label',
-            'type': 'text',
-            'required': true,
-            // 'regex': '^[A-Za-z0-9](([a-zA-Z0-9,=\.!\-#|\$%\^&\*\+/\?_`\{\}~]+)*)@(?:[0-9a-zA-Z-]+\.)+[a-zA-Z]{2,9}$',
-            'placeholder': 'email3'
-        },
-        {
-            'id': 'select3',
-            'class': 'customForm form3',
-            'label': 'select3',
-            'labelClass': 'label',
-            'type': 'select',
-            "options": [{
-                'value': 'select element 3',
-                'text': 'select element 3'
-            }],
-            'required': false,
-        },
-        {
-            'id': 'submit3',
-            'class': 'submitBtn form3',
-            'type': 'submit',
-            'text': 'Submit3',
-            'required': false,
-            'display': 'block',
-        }
-    ]
+    // const customForm3 = [
+    //     {
+    //         'id': 'name3',
+    //         'class': 'customForm form3',
+    //         'label': t('name'),
+    //         'labelClass': 'label',
+    //         'type': 'text',
+    //         'required': true,
+    //         // 'regex': '^[a-zA-Z]+$',
+    //         'placeholder': 'full name'
+    //     },
+    //     {
+    //         'id': 'input3',
+    //         'class': 'customForm form3',
+    //         'label': 'input3',
+    //         'labelClass': 'label',
+    //         'type': 'text',
+    //         'required': false,
+    //         'display': 'none'
+    //     },
+    //     {
+    //         'id': 'email3',
+    //         'class': 'customForm form3',
+    //         'label': t('email'),
+    //         'labelClass': 'label',
+    //         'type': 'text',
+    //         'required': true,
+    //         // 'regex': '^[A-Za-z0-9](([a-zA-Z0-9,=\.!\-#|\$%\^&\*\+/\?_`\{\}~]+)*)@(?:[0-9a-zA-Z-]+\.)+[a-zA-Z]{2,9}$',
+    //         'placeholder': 'email3'
+    //     },
+    //     {
+    //         'id': 'select3',
+    //         'class': 'customForm form3',
+    //         'label': 'select3',
+    //         'labelClass': 'label',
+    //         'type': 'select',
+    //         "options": [{
+    //             'value': 'select element 3',
+    //             'text': 'select element 3'
+    //         }],
+    //         'required': false,
+    //     },
+    //     {
+    //         'id': 'submit3',
+    //         'class': 'submitBtn form3',
+    //         'type': 'submit',
+    //         'text': 'Submit3',
+    //         'required': false,
+    //         'display': 'block',
+    //     }
+    // ]
 
-    // useEffect(() => {
-    //     customForm.map((el, index) => (
-    //         // ...formData,
-    //         // setFormData({
-    //         //     [el.id]: '',
-    //         // })
-    //         console.log(el.id)
-    //     ))
-    // }, [])
+    const handleSave = values => console.log(values)
+
   return (
     <div>
         <div style={{marginBottom: '5px'}}>
-            <button type='button' onClick={ () => changeLanguage('en') }>en</button>
-            <button type='button' onClick={ () => changeLanguage('ar') }>ar</button>
-        </div>
+            <button type='button' onClick={ () => handleTranslation('en') }>en</button>
+            <button type='button' onClick={ () => handleTranslation('ar') }>ar</button>
+        </div><hr />
         <form className="form1">
             <FormBuilder
                 form={{
@@ -218,25 +184,23 @@ function TestForm() {
                     },
                     components: customForm1
                 }}
-                handleChange={handleChange}
-                handleSubmit={handleSubmit}
-             />
+                onSave={handleSave}
+            />
         </form><hr />
         <form className="form2">
             <FormBuilder
                 form={{
-                class: { // class for the div wrapping the label/input pair
-                    'stateDefault': 'defaultClass',
-                    'stateError': '',
-                    'stateInactive': ''
-                },
-                    components: customForm2
+                    class: { // class for the div wrapping the label/input pair
+                        'stateDefault': 'defaultClass',
+                        'stateError': '',
+                        'stateInactive': ''
+                    },
+                    components: customForm2,
                 }}
-                handleChange={handleChange}
-                handleSubmit={handleSubmit}
-            />
+                onSave={handleSave}
+                />
         </form><hr />
-        <form className="form3">
+        {/* <form className="form3">
             <FormBuilder
                 form={{
                 class: { // class for the div wrapping the label/input pair
@@ -249,7 +213,7 @@ function TestForm() {
                 handleChange={handleChange}
                 handleSubmit={handleSubmit}
             />
-        </form><hr />
+        </form><hr /> */}
     </div>
   )
 }

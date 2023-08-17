@@ -1,9 +1,28 @@
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { changeLanguage } from 'i18next'
 
-function FormBuilder({form, handleChange, handleSubmit}) {
-  const [errors, setErrors] = useState({})
+function FormBuilder({form, onSave}) {
+  const { t } = useTranslation()
+  const [errors, setErrors] = useState([])
   const [showError, setShowError] = useState(false)
+  const [formData, setFormData] = useState([])
   
+  const handleChange = ({id, value}) => {
+      setFormData(prevData => ({
+        ...prevData,
+        [id]: value
+      }))
+  }
+
+  const handleSubmit = (e) => {
+      e.preventDefault()
+      const hasErrors = Object.values(errors).some(value => value !== null) // checks if form has any error messages
+      console.log(hasErrors)
+      hasErrors ? setShowError(true) : (() => {console.log(formData); setShowError(false)}) // submit only if form has no error messages at all
+      onSave(formData)
+  }
+
   const handleValidation = (e, {id, required, regex}) => {
     const userInput = e.target.value
 
@@ -56,11 +75,17 @@ function FormBuilder({form, handleChange, handleSubmit}) {
   
   return (
     <>
+      {form.translated && (
+      <div style={{marginBottom: '5px'}}>
+          <button type='button' onClick={ () => changeLanguage('en') }>en</button>
+          <button type='button' onClick={ () => changeLanguage('ar') }>ar</button>
+      </div>
+      )}
       {form.components.map((component, index) => (
         <div key={index} className={form.class.stateDefault}style={{display: component?.display}}>
           {
             component?.type === 'submit' ? (
-              <button id={component?.id} className={component?.class} type={component?.type} onClick={(e) => {handleSubmit(e); setShowError(true)}}>{component?.text}</button>
+              <button id={component?.id} className={component?.class} type={component?.type} onClick={handleSubmit}>{component?.text}</button>
             ) : (
               component?.type === 'select' ? (
                 <>
@@ -68,7 +93,7 @@ function FormBuilder({form, handleChange, handleSubmit}) {
                     htmlFor={component?.id} 
                     className={component?.labelClass}
                   >
-                    {component?.label}
+                    {t(component?.label)}
                   </label><br />
                   <select
                     id={component?.id} 
@@ -88,7 +113,7 @@ function FormBuilder({form, handleChange, handleSubmit}) {
                     htmlFor={component?.id} 
                     className={component?.labelClass}
                   >
-                    {component?.label}
+                    {t(component?.label)}
                   </label><br />
                   <input 
                     id={component?.id} 

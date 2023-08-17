@@ -5,6 +5,7 @@ import './App.css'
 
 import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom'
 import TestForm from './components/TestForm'
+import SendOTP from './components/SendOTP'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -39,6 +40,7 @@ function App() {
           </>
         } />
         <Route path='form' element={<TestForm />} />
+        <Route path='otp' element={<SendOTP />} />
       </Routes>
     </Router>
       
