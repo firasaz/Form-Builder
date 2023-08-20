@@ -8,51 +8,56 @@ function FormBuilder({form, onSave}) {
   const [showError, setShowError] = useState(false)
   const [formData, setFormData] = useState([])
   
-  const handleChange = ({id, value}) => {
-      setFormData(prevData => ({
-        ...prevData,
-        [id]: value
-      }))
+  const handleChange = (e, component) => {
+    handleValidation(e, component)
+    const { name, value } = e.target
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: value
+    }))
   }
 
   const handleSubmit = (e) => {
       e.preventDefault()
       const hasErrors = Object.values(errors).some(value => value !== null) // checks if form has any error messages
       console.log(hasErrors)
-      hasErrors ? setShowError(true) : (() => {console.log(formData); setShowError(false)}) // submit only if form has no error messages at all
-      onSave(formData)
+      hasErrors ? setShowError(true) : onSave(formData) // submit only if form has no error messages at all
+      
   }
 
-  const handleValidation = (e, {id, required, regex}) => {
+  const handleValidation = (e, {id, validation}) => {
     const userInput = e.target.value
-
-    if (required && !userInput) {
-      console.log('field empty')
-      setErrors({
-        ...errors,
-        [id]: "Cannot be empty"
-      })
-    } else {
-      if (userInput.match(regex)) {
+    if(validation) {
+      const { required, regex, errorMsg } = validation
+      const { emptyMsg, invalidMsg } = errorMsg
+      if (required && !userInput) {
+        console.log('field empty')
         setErrors({
           ...errors,
-          [id]: null
+          [id]: emptyMsg
         })
       } else {
-        setErrors({
-          ...errors,
-          [id]: 'Invalid input'
-        })
+        if (userInput.match(regex)) {
+          setErrors({
+            ...errors,
+            [id]: null
+          })
+        } else {
+          setErrors({
+            ...errors,
+            [id]: invalidMsg
+          })
+        }
       }
-    }
+    }    
   }
 
   // chatGPT solution
   useEffect(() => {
     const updatedErrors = {}
     form.components.map(component => {
-      component.required && (
-        updatedErrors[component.id] = 'Cannot be empty'
+      component?.validation?.required && (
+        updatedErrors[component.id] = component?.validation?.errorMsg?.emptyMsg
       )
     })
     setErrors({
@@ -60,32 +65,22 @@ function FormBuilder({form, onSave}) {
       ...updatedErrors
     })
   }, [])
-
-  // // my approach
-  // useEffect(() => {
-  //   form.components.map(component => {
-  //     component.required && (
-  //       setErrors({
-  //         ...errors,
-  //         [component.id]: "Cannot be empty"
-  //       })
-  //     )
-  //   })
-  // }, [])
   
   return (
-    <>
-      {form.translated && (
+    <form onSubmit={handleSubmit}>
+
+      {/* {form.translated && (
       <div style={{marginBottom: '5px'}}>
           <button type='button' onClick={ () => changeLanguage('en') }>en</button>
           <button type='button' onClick={ () => changeLanguage('ar') }>ar</button>
       </div>
-      )}
+      )} */}
+      
       {form.components.map((component, index) => (
-        <div key={index} className={form.class.stateDefault}style={{display: component?.display}}>
+        <div key={index} className={form.class.stateDefault} style={{display: component?.display}}>
           {
             component?.type === 'submit' ? (
-              <button id={component?.id} className={component?.class} type={component?.type} onClick={handleSubmit}>{component?.text}</button>
+              <button id={component?.id} className={component?.class} name={component?.name} type={component?.type}>{component?.text}</button>
             ) : (
               component?.type === 'select' ? (
                 <>
@@ -98,7 +93,8 @@ function FormBuilder({form, onSave}) {
                   <select
                     id={component?.id} 
                     className={component?.class} 
-                    onClick={(e) => { handleChange(e) }}
+                    name={component?.name} 
+                    onClick={(e) => { handleChange(e, component) }}
                   >
                     {
                       component?.options.map((option, index) => (
@@ -118,15 +114,13 @@ function FormBuilder({form, onSave}) {
                   <input 
                     id={component?.id} 
                     className={component?.class} 
+                    name={component?.name} 
                     type={component.type} 
-                    onChange={(e) => { 
-                      handleValidation(e, component);
-                      handleChange(e); 
-                    }} 
+                    onChange={(e) => { handleChange(e, component) }} 
                     placeholder = {component?.placeholder}
                   />
                   <div className='errorMsg' style={ showError ? {display: 'block'} : {display: 'none'} }>
-                    <span style={{ color: "red" }}>{errors[component?.id]}</span>
+                    <span style={{ color: "red", fontSize: '14px' }}>{errors[component?.id]}</span>
                   </div>
                 </>
               )
@@ -134,7 +128,7 @@ function FormBuilder({form, onSave}) {
           }
         </div>
       ))}
-    </>
+    </form>
   )
 }
 

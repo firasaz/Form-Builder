@@ -14,35 +14,51 @@ function TestForm() {
         {
             'id': 'name1',
             'class': 'customForm form1',
+            'name': 'name1Name',
             'label': t('name'),
             'labelClass': 'label',
             'type': 'text',
-            'required': true,
-            // 'regex': '^[a-zA-Z]+$',
+            'validation': {
+                'required': true,
+                'regex': '^[a-zA-Z]+$', // this regex accepts 1-word values only
+                'errorMsg': {
+                    'emptyMsg': 'Field Required (custom)',
+                    'invalidMsg': 'Invalid Input (custom)'
+                }
+            },
             'placeholder': 'full name'
         },
         {
             'id': 'input1',
             'class': 'customForm form1',
+            'name': 'input1Name',
             'label': 'input1',
             'labelClass': 'label',
             'type': 'text',
             'required': false,
-            'display': 'block'
+            'display': 'none'
         },
         {
             'id': 'email',
             'class': 'customForm form1',
+            'name': 'emailName',
             'label': t('email'),
             'labelClass': 'label',
             'type': 'text',
-            'required': true,
-            // 'regex': '^[A-Za-z0-9](([a-zA-Z0-9,=\.!\-#|\$%\^&\*\+/\?_`\{\}~]+)*)@(?:[0-9a-zA-Z-]+\.)+[a-zA-Z]{2,9}$',
+            'validation': {
+                'required': true,
+                // 'regex': '^[A-Za-z0-9](([a-zA-Z0-9,=\.!\-#|\$%\^&\*\+/\?_`\{\}~]+)*)@(?:[0-9a-zA-Z-]+\.)+[a-zA-Z]{2,9}$',
+                'errorMsg': {
+                    'emptyMsg': 'Field Required (custom)',
+                    'invalidMsg': 'Invalid Input (custom)'
+                }
+            },
             'placeholder': 'email'
         },
         {
             'id': 'select',
             'class': 'customForm form1',
+            'name': 'selectName',
             "path": "contact.name",
             'label': 'select',
             'labelClass': 'label',
@@ -66,16 +82,24 @@ function TestForm() {
         {
             'id': 'name2',
             'class': 'customForm form2',
+            'name': 'name2Name',
             'label': t('name'),
             'labelClass': 'label',
             'type': 'text',
-            'required': true,
-            // 'regex': '^[a-zA-Z]+$',
+            'validation': {
+                'required': true,
+                'regex': '^[a-zA-Z]+$', // this regex accepts 1-word values only
+                'errorMsg': {
+                    'emptyMsg': 'Field Required (custom)',
+                    'invalidMsg': 'Invalid Input (custom)'
+                }
+            },
             'placeholder': 'full name'
         },
         {
             'id': 'input2',
             'class': 'customForm form2',
+            'name': 'input2Name',
             'label': 'input2',
             'labelClass': 'label',
             'type': 'text',
@@ -85,16 +109,24 @@ function TestForm() {
         {
             'id': 'email2',
             'class': 'customForm form2',
+            'name': 'email2Name',
             'label': t('email'),
             'labelClass': 'label',
             'type': 'text',
-            'required': true,
-            // 'regex': '^[A-Za-z0-9](([a-zA-Z0-9,=\.!\-#|\$%\^&\*\+/\?_`\{\}~]+)*)@(?:[0-9a-zA-Z-]+\.)+[a-zA-Z]{2,9}$',
+            'validation': {
+                'required': true,
+                // 'regex': '^[A-Za-z0-9](([a-zA-Z0-9,=\.!\-#|\$%\^&\*\+/\?_`\{\}~]+)*)@(?:[0-9a-zA-Z-]+\.)+[a-zA-Z]{2,9}$',
+                'errorMsg': {
+                    'emptyMsg': 'Field Required (custom)',
+                    'invalidMsg': 'Invalid Input (custom)'
+                }
+            },
             'placeholder': 'email2'
         },
         {
             'id': 'select2',
             'class': 'customForm form2',
+            'name': 'select2Name',
             'label': 'select2',
             'labelClass': 'label',
             'type': 'select',
@@ -174,21 +206,18 @@ function TestForm() {
             <button type='button' onClick={ () => handleTranslation('en') }>en</button>
             <button type='button' onClick={ () => handleTranslation('ar') }>ar</button>
         </div><hr />
-        <form className="form1">
-            <FormBuilder
-                form={{
-                    class: { // class for the div wrapping the label/input pair
-                        'stateDefault': 'defaultClass',
-                        'stateError': '',
-                        'stateInactive': ''
-                    },
-                    components: customForm1
-                }}
-                onSave={handleSave}
-            />
-        </form><hr />
-        <form className="form2">
-            <FormBuilder
+        <FormBuilder
+            form={{
+                class: { // class for the div wrapping the label/input pair
+                    'stateDefault': 'defaultClass',
+                    'stateError': '',
+                    'stateInactive': ''
+                },
+                components: customForm1
+            }}
+            onSave={handleSave}
+        /><hr />
+        <FormBuilder
                 form={{
                     class: { // class for the div wrapping the label/input pair
                         'stateDefault': 'defaultClass',
@@ -198,8 +227,7 @@ function TestForm() {
                     components: customForm2,
                 }}
                 onSave={handleSave}
-                />
-        </form><hr />
+        /><hr />
         {/* <form className="form3">
             <FormBuilder
                 form={{
