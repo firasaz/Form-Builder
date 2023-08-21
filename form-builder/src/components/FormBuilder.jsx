@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { changeLanguage } from 'i18next'
 
-function FormBuilder({form, onSave}) {
-  const { t } = useTranslation()
+function CustomFormBuilder({form, formClass, onSave}) {
   const [errors, setErrors] = useState([])
   const [showError, setShowError] = useState(false)
   const [formData, setFormData] = useState([])
   
   const handleChange = (e, component) => {
     handleValidation(e, component)
-    const { name, value } = e.target
+    const { id, name, value, type } = e.target
+    type === 'radio' ? 
+    setFormData(prevData => ({
+      ...prevData,
+      [id]: value
+    })) :
     setFormData(prevData => ({
       ...prevData,
       [name]: value
@@ -20,7 +22,7 @@ function FormBuilder({form, onSave}) {
   const handleSubmit = (e) => {
       e.preventDefault()
       const hasErrors = Object.values(errors).some(value => value !== null) // checks if form has any error messages
-      console.log(hasErrors)
+      console.log(`errors: ${hasErrors}`)
       hasErrors ? setShowError(true) : onSave(formData) // submit only if form has no error messages at all
       
   }
@@ -52,84 +54,92 @@ function FormBuilder({form, onSave}) {
     }    
   }
 
-  // chatGPT solution
+  // initialize all required fields with a "required field" error message
   useEffect(() => {
     const updatedErrors = {}
-    form.components.map(component => {
+    form.template.map(component => {
       component?.validation?.required && (
         updatedErrors[component.id] = component?.validation?.errorMsg?.emptyMsg
       )
     })
+
     setErrors({
       ...errors,
       ...updatedErrors
     })
-  }, [])
+  }, [form.template])
   
+  const renderFields = ({ template, parentClass }) => {
+    return template.map((element, index) => {
+      const { id, className, name, label, labelClass, type, placeholder, options, validation } = element
+      switch(type){
+        case 'submit':
+          return (
+            <div key={index} className={parentClass}>
+              <button id={id} className={className} name={name} type={type}>{label}</button>
+            </div>
+          )
+        case 'select':
+          return (
+            <div key={index} className={parentClass}>
+              <label htmlFor={id} className={labelClass}>
+                {label}
+              </label><br />
+              <select
+                id={id} 
+                className={className} 
+                name={name} 
+                onClick={(e) => { handleChange(e, element) }}
+              >
+                {
+                  options.map((option, index) => (
+                    <option key={index} value={option?.value}>{option?.text}</option>
+                  ))
+                }
+              </select>
+            </div>
+          )
+        case 'radio':
+          return (
+            <div key={index} className={parentClass}>
+              <label htmlFor={id} className={labelClass}>
+                {label}
+              </label><br />
+              <input id={id} className={className} name={name} type={type} placeholder={placeholder} onClick={(e) => { handleChange(e, element) }} />
+            </div>
+          )        
+        case 'tel':
+          return (
+            <div key={index} className={parentClass}>
+              <label htmlFor={id} className={labelClass}>
+                {label}
+              </label>
+              <input id={id} className={className} name={name} type={type} placeholder={placeholder} onChange={(e) => { handleChange(e, element) }} />
+              <div className='errorMsg' style={ showError ? {display: 'block'} : {display: 'none'} }>
+                <span style={{ color: "red", fontSize: validation?.fontSize }}>{errors[id]}</span>
+              </div>
+            </div>
+          )
+        default:
+          return (
+            <div key={index} className={parentClass}>
+              <label htmlFor={id} className={labelClass}>
+                {label}
+              </label><br />
+              <input id={id} className={className} name={name} type={type} placeholder={placeholder} onChange={(e) => { handleChange(e, element) }} />
+              <div className='errorMsg' style={ showError ? {display: 'block'} : {display: 'none'} }>
+                <span style={{ color: "red", fontSize: validation?.fontSize }}>{errors[id]}</span>
+              </div>
+            </div>
+          )
+      }
+    })
+  }
   return (
-    <form onSubmit={handleSubmit}>
-
-      {/* {form.translated && (
-      <div style={{marginBottom: '5px'}}>
-          <button type='button' onClick={ () => changeLanguage('en') }>en</button>
-          <button type='button' onClick={ () => changeLanguage('ar') }>ar</button>
-      </div>
-      )} */}
-      
-      {form.components.map((component, index) => (
-        <div key={index} className={form.class.stateDefault} style={{display: component?.display}}>
-          {
-            component?.type === 'submit' ? (
-              <button id={component?.id} className={component?.class} name={component?.name} type={component?.type}>{component?.text}</button>
-            ) : (
-              component?.type === 'select' ? (
-                <>
-                  <label
-                    htmlFor={component?.id} 
-                    className={component?.labelClass}
-                  >
-                    {t(component?.label)}
-                  </label><br />
-                  <select
-                    id={component?.id} 
-                    className={component?.class} 
-                    name={component?.name} 
-                    onClick={(e) => { handleChange(e, component) }}
-                  >
-                    {
-                      component?.options.map((option, index) => (
-                        <option key={index} value={option?.value}>{option?.text}</option>
-                      ))
-                    }
-                  </select>
-                </>
-              ) : (
-                <>
-                  <label 
-                    htmlFor={component?.id} 
-                    className={component?.labelClass}
-                  >
-                    {t(component?.label)}
-                  </label><br />
-                  <input 
-                    id={component?.id} 
-                    className={component?.class} 
-                    name={component?.name} 
-                    type={component.type} 
-                    onChange={(e) => { handleChange(e, component) }} 
-                    placeholder = {component?.placeholder}
-                  />
-                  <div className='errorMsg' style={ showError ? {display: 'block'} : {display: 'none'} }>
-                    <span style={{ color: "red", fontSize: '14px' }}>{errors[component?.id]}</span>
-                  </div>
-                </>
-              )
-            )
-          }
-        </div>
-      ))}
+    <form onSubmit={handleSubmit} className={formClass}>      
+      {renderFields(form)}
     </form>
   )
 }
 
-export default FormBuilder
+export default CustomFormBuilder

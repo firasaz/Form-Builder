@@ -14,9 +14,9 @@ function App() {
     <>
     <Router>
       <Routes>
-        <Route path='/' element={
+        <Route path='/home' element={
           <>
-            <Link to='/form'>Check Out Form Builder</Link>
+            <Link to='/'>Check Out Form Builder</Link>
             <div>
               <a href="https://vitejs.dev" target="_blank">
                 <img src={viteLogo} className="logo" alt="Vite logo" />
@@ -39,7 +39,7 @@ function App() {
             </p>
           </>
         } />
-        <Route path='form' element={<TestForm />} />
+        <Route path='' element={<TestForm />} />
         <Route path='otp' element={<SendOTP />} />
       </Routes>
     </Router>

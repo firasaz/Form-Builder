@@ -20,7 +20,7 @@ i18n
     .use(initReactI18next)
     .init({
         resources,
-        lng: 'ar',
+        lng: 'en',
         fallbackLng: 'en'
     })
 export default i18n

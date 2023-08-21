@@ -5,6 +5,16 @@
   text-align: center;
 }
 
+.rtl {
+  text-align: right;
+  direction: rtl;
+}
+
+.ltr {
+  text-align: left;
+  direction: ltr;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;

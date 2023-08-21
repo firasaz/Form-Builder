@@ -1,10 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import FormBuilder from './FormBuilder'
 import { useTranslation } from 'react-i18next'
 import { changeLanguage } from 'i18next'
 
 function TestForm() {
   const { t } = useTranslation()
+  const [isRTL, setIsRTL] = useState(false)
+  
+  const toggleDirection = () => {
+    setIsRTL(!isRTL);
+  };
   
     const handleTranslation = (lng) => {
         changeLanguage(lng)
@@ -13,14 +18,15 @@ function TestForm() {
     const customForm1 = [
         {
             'id': 'name1',
-            'class': 'customForm form1',
+            'className': 'customForm form1',
             'name': 'name1Name',
             'label': t('name'),
             'labelClass': 'label',
             'type': 'text',
             'validation': {
                 'required': true,
-                'regex': '^[a-zA-Z]+$', // this regex accepts 1-word values only
+                // 'regex': '^[a-zA-Z]+$', // this regex accepts 1-word values only
+                'fontSize': '12px',
                 'errorMsg': {
                     'emptyMsg': 'Field Required (custom)',
                     'invalidMsg': 'Invalid Input (custom)'
@@ -30,7 +36,7 @@ function TestForm() {
         },
         {
             'id': 'input1',
-            'class': 'customForm form1',
+            'className': 'customForm form1',
             'name': 'input1Name',
             'label': 'input1',
             'labelClass': 'label',
@@ -40,7 +46,7 @@ function TestForm() {
         },
         {
             'id': 'email',
-            'class': 'customForm form1',
+            'className': 'customForm form1',
             'name': 'emailName',
             'label': t('email'),
             'labelClass': 'label',
@@ -48,6 +54,7 @@ function TestForm() {
             'validation': {
                 'required': true,
                 // 'regex': '^[A-Za-z0-9](([a-zA-Z0-9,=\.!\-#|\$%\^&\*\+/\?_`\{\}~]+)*)@(?:[0-9a-zA-Z-]+\.)+[a-zA-Z]{2,9}$',
+                'fontSize': '12px',
                 'errorMsg': {
                     'emptyMsg': 'Field Required (custom)',
                     'invalidMsg': 'Invalid Input (custom)'
@@ -57,9 +64,8 @@ function TestForm() {
         },
         {
             'id': 'select',
-            'class': 'customForm form1',
+            'className': 'customForm form1',
             'name': 'selectName',
-            "path": "contact.name",
             'label': 'select',
             'labelClass': 'label',
             'type': 'select',
@@ -70,10 +76,37 @@ function TestForm() {
             'required': false,
         },
         {
+            'id': 'select2',
+            'className': 'customForm form1',
+            'name': 'selectName2',
+            'label': 'select2',
+            'labelClass': 'label',
+            'type': 'select',
+            "options": [{
+                'value': 'select element2',
+                'text': 'select element2'
+            }],
+            'required': false,
+        },
+        {
+            'id': 'radio1',
+            'className': 'customForm form1',
+            'name': 'radioName',
+            'label': 'radio btn1',
+            'type': 'radio'
+        },
+        {
+            'id': 'radio2',
+            'className': 'customForm form1',
+            'name': 'radioName',
+            'label': 'radio btn2',
+            'type': 'radio'
+        },
+        {
             'id': 'submit',
-            'class': 'submitBtn form1',
+            'className': 'submitBtn form1',
             'type': 'submit',
-            'text': 'Submit',
+            'label': 'Submit',
             'required': false,
             'visible': true,
         }
@@ -81,7 +114,7 @@ function TestForm() {
     const customForm2 = [
         {
             'id': 'name2',
-            'class': 'customForm form2',
+            'className': 'customForm form2',
             'name': 'name2Name',
             'label': t('name'),
             'labelClass': 'label',
@@ -98,7 +131,7 @@ function TestForm() {
         },
         {
             'id': 'input2',
-            'class': 'customForm form2',
+            'className': 'customForm form2',
             'name': 'input2Name',
             'label': 'input2',
             'labelClass': 'label',
@@ -108,7 +141,7 @@ function TestForm() {
         },
         {
             'id': 'email2',
-            'class': 'customForm form2',
+            'className': 'customForm form2',
             'name': 'email2Name',
             'label': t('email'),
             'labelClass': 'label',
@@ -116,6 +149,7 @@ function TestForm() {
             'validation': {
                 'required': true,
                 // 'regex': '^[A-Za-z0-9](([a-zA-Z0-9,=\.!\-#|\$%\^&\*\+/\?_`\{\}~]+)*)@(?:[0-9a-zA-Z-]+\.)+[a-zA-Z]{2,9}$',
+                'fontSize': '12px',
                 'errorMsg': {
                     'emptyMsg': 'Field Required (custom)',
                     'invalidMsg': 'Invalid Input (custom)'
@@ -125,7 +159,7 @@ function TestForm() {
         },
         {
             'id': 'select2',
-            'class': 'customForm form2',
+            'className': 'customForm form2',
             'name': 'select2Name',
             'label': 'select2',
             'labelClass': 'label',
@@ -140,7 +174,7 @@ function TestForm() {
             'id': 'submit2',
             'class': 'submitBtn form2',
             'type': 'submit',
-            'text': 'Submit2',
+            'label': 'Submit2',
             'required': false,
             'visible': true,
 
@@ -199,32 +233,38 @@ function TestForm() {
     // ]
 
     const handleSave = values => console.log(values)
+    const inlineStyle = {
+        textAlign: 'right'
+    }
 
   return (
-    <div>
-        <div style={{marginBottom: '5px'}}>
-            <button type='button' onClick={ () => handleTranslation('en') }>en</button>
-            <button type='button' onClick={ () => handleTranslation('ar') }>ar</button>
+    <div  className={`App ${isRTL ? 'rtl' : 'ltr'}`}>
+        <div style={{marginBottom: '5px', textAlign: 'center'}}>
+            {isRTL ?
+            <button type='button' onClick={ () => {handleTranslation('en'); toggleDirection()} }>en</button> 
+            :
+            <button type='button' onClick={ () => {handleTranslation('ar'); toggleDirection()} }>ar</button>
+            }
         </div><hr />
         <FormBuilder
             form={{
-                class: { // class for the div wrapping the label/input pair
+                className: { // class for the div wrapping the label/input pair
                     'stateDefault': 'defaultClass',
                     'stateError': '',
                     'stateInactive': ''
                 },
-                components: customForm1
+                template: customForm1
             }}
             onSave={handleSave}
         /><hr />
         <FormBuilder
                 form={{
-                    class: { // class for the div wrapping the label/input pair
+                    className: { // class for the div wrapping the label/input pair
                         'stateDefault': 'defaultClass',
                         'stateError': '',
                         'stateInactive': ''
                     },
-                    components: customForm2,
+                    template: customForm2,
                 }}
                 onSave={handleSave}
         /><hr />
