@@ -5,13 +5,15 @@ const resources = {
     en: {
         translation: {
             'name': 'name',
-            'email': 'email'
+            'email': 'email',
+            'full name': 'full name'
         }
     },
     ar: {
         translation: {
             'name': 'الاسم',
-            'email': 'البريد الاكتروني'
+            'email': 'البريد الاكتروني',
+            'full name': 'الاسم الثلاثي'
         }
     }
 }

@@ -40,6 +40,7 @@ function App() {
           </>
         } />
         <Route path='' element={<TestForm />} />
+        <Route path='/:lng' element={<TestForm />} />
         <Route path='otp' element={<SendOTP />} />
       </Routes>
     </Router>
