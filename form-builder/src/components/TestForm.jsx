@@ -81,7 +81,7 @@ function TestForm() {
     //     {
     //         'id': 'name3',
     //         'class': 'customForm form3',
-    //         'label': t('name'),
+    //         'label': 'name',
     //         'labelClass': 'label',
     //         'type': 'text',
     //         'required': true,
@@ -100,7 +100,7 @@ function TestForm() {
     //     {
     //         'id': 'email3',
     //         'class': 'customForm form3',
-    //         'label': t('email'),
+    //         'label': 'email',
     //         'labelClass': 'label',
     //         'type': 'text',
     //         'required': true,
@@ -129,28 +129,42 @@ function TestForm() {
     //     }
     // ]
 
+    const testFn = () => console.log('key press')
     const customForm1 = [
         {
             'label': {
-                'labelClassName': 'labelClassName',
-                'text': 'labelText',
+                'labelClassName': 'class',
+                'default': {
+                    'text': 'options',
+                },
+                'ar': {
+                    'text': 'الخيارات',
+                }
             },
             'input': {
                 'type': 'select',
                 'id': 'inputId',
                 'name': 'selectName',
                 'inputClassName': 'inputClassName',
-                'placeholder': 'input placeholder',
-                'options': [
-                    {
-                        'text': 'Option 1',
-                        'value': 'option1',
-                    },
-                    {
-                        'text': 'Option 2',
-                        'value': 'option2',
-                    }
-                ],
+                'options': {
+                    'default': [
+                        {
+                            'text': 'Option 1',
+                            'value': 'option1',
+                        },
+                        {
+                            'text': 'Option 2',
+                        }
+                    ],
+                    'ar': [
+                        {
+                            'text': 'الخيار الأول'
+                        },
+                        {
+                            'text': 'الخيار الثاني'
+                        }
+                    ]
+                },
             },
             'validation': {
                 'required': true,
@@ -164,14 +178,64 @@ function TestForm() {
         },
         {
             'label': {
-                'text': t('name'),
-                'labelClassName': 'name form1'
+                'labelClassName': 'class',
+                'default': {
+                    'text': 'name',
+                },
+                'ar': {
+                    'text': 'الاسم',
+                }
             },
             'input': {
                 'type': 'text',
                 'id': 'nameId',
                 'name': 'nameInput',
-                'placeholder': t('full name'),
+                'placeholder': {
+                    'default':'full name',
+                    'ar': 'الاسم الثلاثي'
+                },
+                'attributes': ['readOnly=true'],
+                'events': [
+                    {
+                        'event': 'onKeyPress',
+                        'handler': testFn
+                    }
+                ]
+            },
+            'validation': {
+                'required': true,
+                'fontSize': '12',
+                'fontUnit': 'px',
+                'errorMsg': {
+                    'emptyErrorMsg': 'Field Required (custom)',
+                    'invalidErrorMsg': 'Invalid Input (custom)'
+                }
+            }
+        },
+        {
+            'label': {
+                'labelClassName': 'class',
+                'default': {
+                    'text': 'Password',
+                },
+                'ar': {
+                    'text': 'كلمة السر',
+                }
+            },
+            'input': {
+                'type': 'password',
+                'id': 'passwordId',
+                'name': 'passwordInput',
+                'placeholder': {
+                    'default':'password',
+                    'ar': 'الكلمة السرية'
+                },
+                'events': [
+                    {
+                        event: 'onFocus',
+                        handler: testFn
+                    }
+                ]
             },
             'validation': {
                 'required': true,
@@ -188,7 +252,7 @@ function TestForm() {
 
   return (
     <div>
-        <FormBuilderT
+        <FormBuilder
             form={{
                 template: customForm1,
                 fieldClass: { // class for the div wrapping the label/input pair
@@ -196,31 +260,13 @@ function TestForm() {
                     'stateError': '',
                     'stateInactive': ''
                 },
-                langs: {
-                    'ar': {
-                        'labelText': 'العنوان',
-                        'placeholder': 'الاسم',
-                        'options': [
-                            {
-                                'text': 'الخيار الأول',
-                            },
-                            {
-                                'text': 'الخيار الثاني',
-                            }
-                        ],
-                        'errorMsg': {
-                            'emptyErrorMsg': 'الحقل ضروري',
-                            'invalidErrorMsg': 'الحقل غير صحيح'
-                        }
-                    }
-                }
             }}
             formClass='form1'
             onSave={handleSave}
         />
 
         {/* form */}
-        {/* <FormBuilder
+        {/* <FormBuilderT
             form={{
                 template: customForm1,
                 fieldClass: { // class for the div wrapping the label/input pair

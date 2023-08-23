@@ -1,18 +1,15 @@
-// Translation Through URL Parameters
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
 
 function CustomFormBuilder({form, formClass, onSave}) {
   const [errors, setErrors] = useState([])
   const [showError, setShowError] = useState(false)
   const [formData, setFormData] = useState([])
   
-  const {lng} = useParams()
-  const [lang, setLang] = useState(lng)
+  const [lang, setLang] = useState('ar')
   const [isRTL, setIsRTL] = useState(false)
   const toggleDirection = (lng='default') => {
     setIsRTL(!isRTL);
-    // setLang(lng)
+    setLang(lng)
   };
 
   const handleSubmit = (e) => {
@@ -95,14 +92,14 @@ function CustomFormBuilder({form, formClass, onSave}) {
         case 'submit':
           return (
             <div key={index} className={stateDefault}>
-              <button id={id} className={labelClassName} name={name} type={type}>{!(isRTL && langs) ? text : langs[lng].labelText}</button>
+              <button id={id} className={labelClassName} name={name} type={type}>{!(isRTL && langs) ? text : langs[lang].labelText}</button>
             </div>
           )
         case 'select':
           return (
             <div key={index} className={stateDefault}>
               <label htmlFor={id} className={labelClassName}>
-                { !(lng && langs) ? text : langs[lng].labelText }
+                { !(isRTL && langs) ? text : langs[lang].labelText }
               </label><br />
               <select
                 id={id} 
@@ -111,11 +108,11 @@ function CustomFormBuilder({form, formClass, onSave}) {
                 onClick={(e) => { handleChange(e, element) }}
               >
                 {
-                  !(lng && langs) ? 
+                  !(isRTL && langs) ? 
                   options.map((option, index) => (
                     <option key={index} label={option?.label}>{option?.text}</option>
                   )) : 
-                  langs[lng].options.map((option, index) => (
+                  langs[lang].options.map((option, index) => (
                     <option key={index} label={option?.label}>{option?.text}</option>
                   ))
                 }
@@ -147,9 +144,9 @@ function CustomFormBuilder({form, formClass, onSave}) {
           return (
             <div key={index} className={stateDefault}>
               <label htmlFor={id} className={labelClassName}>
-                {!(lng && langs) ? text : langs[lng].labelText}
+                {!(isRTL && langs) ? text : langs[lang].labelText}
               </label><br />
-              <input id={id} className={inputClassName} name={name} type={type} placeholder={!(lng && langs) ? placeholder : langs[lng].placeholder} onChange={(e) => { handleChange(e, element) }} />
+              <input id={id} className={inputClassName} name={name} type={type} placeholder={!(isRTL && langs) ? placeholder : langs[lang].placeholder} onChange={(e) => { handleChange(e, element) }} />
               <div className='errorMsg'>
                 <span style={showError ? { color: "red", fontSize: fontSize+fontUnit } : {display: 'none'}}>{errors[id]}</span>
               </div>
@@ -160,6 +157,14 @@ function CustomFormBuilder({form, formClass, onSave}) {
   }
   return (
     <div>
+      {/* translation div */}
+      <div style={{marginBottom: '15px', textAlign: 'center'}}>
+          {isRTL ?
+          <button type='button' onClick={ () => {toggleDirection()} }>en</button>
+          :
+          <button type='button' onClick={ () => {toggleDirection('ar')} }>ar</button>
+          }
+      </div>
       <form onSubmit={handleSubmit} className={formClass}>
         {renderFields(form)}
         <div className={form.fieldClass.stateDefault}>
